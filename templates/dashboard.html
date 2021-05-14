@@ -1,0 +1,596 @@
+{% extends 'layout.html' %}
+{% block body %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            margin: 0;
+            background-size: auto;
+            background-image: url(static/images/index.jpg);
+        }
+
+        .owl-nav button {
+            position: absolute;
+            top: 50%;
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .owl-nav button.owl-prev {
+            left: 0;
+        }
+
+        .owl-nav button.owl-next {
+            right: 0;
+        }
+
+        .owl-dots {
+            text-align: center;
+            padding-top: 15px;
+        }
+
+        .owl-dots button.owl-dot {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            display: inline-block;
+            background: #ccc;
+            margin: 0 3px;
+        }
+
+        .owl-dots button.owl-dot.active {
+            background-color: #000;
+        }
+
+        .owl-dots button.owl-dot:focus {
+            outline: none;
+        }
+
+        .owl-nav button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.38) !important;
+        }
+
+        .owl-nav button:focus {
+            outline: none;
+        }
+    </style>
+
+
+    <div class="jumbotron text-center">
+
+
+        {% if session.id != "UID0001" %}
+            <h1>Welcome, {{ session.name }} !! </h1>
+            <hr>
+            <tr>
+                <h3 class="jumbotron-fluid">Liked Songs</h3>
+            </tr>
+            <div class="owl-slider">
+                <div id="carousel" class="owl-carousel">
+                    {% for i in session.likedSongs %}
+                        <div class="item">
+                            <div class="w-full">
+                                <a class="block relative h-48 rounded overflow-hidden">
+                                    <img src= '{{ i.ImageLocation|string }}'  class="object-cover object-center w-full h-full block">
+                                </a>
+                                <div class="mt-4">
+                                    <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">{{ i.Song_ID }}</h3>
+                                    <h2 class="text-gray-900 title-font text-lg font-medium">{{ i.Name }}</h2>
+                                    <p class="mt-1">Release Year : {{ i.Year }}</p>
+
+                                    <p class="mt-1">{{ 2020|int -  i.Year|int }} Years Old</p>
+                                    <p class="mt-1">Duration : {{ i.Duration }} sec</p>
+                                    {#                                <p class="mt-1">$16.00</p>#}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <hr>
+            <tr>
+                <h3 class="jumbotron-fluid">Your Playlists</h3>
+            </tr>
+
+
+            <div class="owl-slider">
+                <div id="carousel4" class="owl-carousel">
+                    {% for i in session.allPlaylist %}
+                        <div class="item">
+                            <div class="w-full">
+                                {#                            <a class="block relative h-48 rounded overflow-hidden">#}
+                                {#                                <img alt={{ i.Song_ID }} class="object-cover object-center w-full h-full block"#}
+                                {#                                src= {{ i.ImageLocation }}>#}
+                                {#                            </a>#}
+                                <div class="mt-4">
+                                    <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">{{ i.pltID }}</h3>
+                                    <h2 class="text-gray-900 title-font text-lg font-medium">{{ i.pltName }}</h2>
+                                    <p class="mt-1">Songs Count : {{ i.pltSongCount }}</p>
+                                    <hr>
+                                    <p class="mt-1"><b>SONGS</b></p>
+
+                                    {% for j in i.pltSongs %}
+                                        <p style="margin-bottom: 5%" class="mt-1">{{ j }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <hr>
+            <tr>
+                <h3 class="jumbotron-fluid">Liked Artists</h3>
+            </tr>
+            <div class="owl-slider">
+                <div id="carousel1" class="owl-carousel">
+                    {% for i in session.likedArtist %}
+                        <div class="item">
+                            <div class="w-full">
+                                {#                            <a class="block relative h-48 rounded overflow-hidden">#}
+                                {#                                <img alt={{ i.Song_ID }} class="object-cover object-center w-full h-full block"#}
+                                {#                                src= {{ i.ImageLocation }}>#}
+                                {#                            </a>#}
+                                <div class="mt-4">
+                                    <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">{{ i.Artist_ID }}</h3>
+                                    <h2 class="text-gray-900 title-font text-lg font-medium">{{ i.Name }}</h2>
+                                    <p class="mt-1">DOB : {{ i.DOB }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <hr>
+            <tr>
+                <h3 class="jumbotron-fluid">Liked Genre</h3>
+            </tr>
+            <div class="owl-slider">
+                <div id="carousel3" class="owl-carousel">
+                    {% for i in session.likedGenre %}
+                        <div class="item">
+                            <div class="w-full">
+                                {#                            <a class="block relative h-48 rounded overflow-hidden">#}
+                                {#                                <img alt={{ i.Song_ID }} class="object-cover object-center w-full h-full block"#}
+                                {#                                src= {{ i.ImageLocation }}>#}
+                                {#                            </a>#}
+                                <div class="mt-4">
+                                    <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">{{ i.Genre_ID }}</h3>
+                                    <h2 class="text-gray-900 title-font text-lg font-medium">{{ i.Name }}</h2>
+                                    {#                                    <p class="mt-1">Songs Count : {{ i.albSongCount }}</p>#}
+                                    {#                                    <hr>#}
+                                    {#                                    <p class="mt-1"><b>SONGS</b></p>#}
+                                    {##}
+                                    {#                                    {% for j in i.albSongs %}#}
+                                    {#                                        <p style="margin-bottom: 5%" class="mt-1">{{ j }}</p>#}
+                                    {#                                    {% endfor %}#}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+
+        {% endif %}
+
+        {% if session.id == "UID0001" %}
+            <h1>Welcome, Administrator !! </h1>
+            <hr>
+            <tr>
+                <h3 class="jumbotron-fluid">Songs</h3>
+            </tr>
+            <div class="owl-slider">
+                <div id="carousel" class="owl-carousel">
+                    {% for i in session.allSongs %}
+                        <div class="item">
+                            <div class="w-full">
+                                <a class="block relative h-48 rounded overflow-hidden">
+                                    <img src= '{{ i.ImageLocation|string }}'  class="object-cover object-center w-full h-full block">
+                                </a>
+                                <div class="mt-4">
+                                    <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">{{ i.Song_ID }}</h3>
+                                    <h2 class="text-gray-900 title-font text-lg font-medium">{{ i.Name }}</h2>
+                                    <p class="mt-1">Release Year : {{ i.Year }}</p>
+
+                                    <p class="mt-1">{{ 2020|int -  i.Year|int }} Years Old</p>
+                                    <p class="mt-1">Duration : {{ i.Duration }} sec</p>
+                                    {#                                <p class="mt-1">$16.00</p>#}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <hr>
+            <tr>
+                <h3 class="jumbotron-fluid">Artists</h3>
+            </tr>
+            <div class="owl-slider">
+                <div id="carousel1" class="owl-carousel">
+                    {% for i in session.allArtist %}
+                        <div class="item">
+                            <div class="w-full">
+                                {#                            <a class="block relative h-48 rounded overflow-hidden">#}
+                                {#                                <img alt={{ i.Song_ID }} class="object-cover object-center w-full h-full block"#}
+                                {#                                src= {{ i.ImageLocation }}>#}
+                                {#                            </a>#}
+                                <div class="mt-4">
+                                    <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">{{ i.Artist_ID }}</h3>
+                                    <h2 class="text-gray-900 title-font text-lg font-medium">{{ i.Name }}</h2>
+                                    <p class="mt-1">DOB : {{ i.DOB }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <hr>
+            <tr>
+                <h3 class="jumbotron-fluid">Users</h3>
+            </tr>
+            <div class="owl-slider">
+                <div id="carousel2" class="owl-carousel">
+                    {% for i in session.allUser %}
+                        <div class="item">
+                            <div class="w-full">
+                                {#                            <a class="block relative h-48 rounded overflow-hidden">#}
+                                {#                                <img alt={{ i.Song_ID }} class="object-cover object-center w-full h-full block"#}
+                                {#                                src= {{ i.ImageLocation }}>#}
+                                {#                            </a>#}
+                                <div class="mt-4">
+                                    <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">{{ i.User_ID }}</h3>
+                                    <h2 class="text-gray-900 title-font text-lg font-medium">{{ i.Name }}</h2>
+                                    <p class="mt-1">DOB : {{ i.DOB }}</p>
+                                    <p class="mt-1">Gender : {{ i.Gender }}</p>
+                                    <p class="mt-1">Address : {{ i.Address }}</p>
+                                    <p class="mt-1">Mobile : {{ i.Mobile }}</p>
+                                    <p class="mt-1">Email : {{ i.Email_ID }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <hr>
+            <tr>
+                <h3 class="jumbotron-fluid">Genre</h3>
+            </tr>
+            <div class="owl-slider">
+                <div id="carousel3" class="owl-carousel">
+                    {% for i in session.allGenre %}
+                        <div class="item">
+                            <div class="w-full">
+                                {#                            <a class="block relative h-48 rounded overflow-hidden">#}
+                                {#                                <img alt={{ i.Song_ID }} class="object-cover object-center w-full h-full block"#}
+                                {#                                src= {{ i.ImageLocation }}>#}
+                                {#                            </a>#}
+                                <div class="mt-4">
+                                    <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">{{ i.Genre_ID }}</h3>
+                                    <h2 class="text-gray-900 title-font text-lg font-medium">{{ i.Name }}</h2>
+{#                                    <p class="mt-1">Songs Count : {{ i.albSongCount }}</p>#}
+{#                                    <hr>#}
+{#                                    <p class="mt-1"><b>SONGS</b></p>#}
+{##}
+{#                                    {% for j in i.albSongs %}#}
+{#                                        <p style="margin-bottom: 5%" class="mt-1">{{ j }}</p>#}
+{#                                    {% endfor %}#}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <hr>
+            <tr>
+                <h3 class="jumbotron-fluid">Albums</h3>
+            </tr>
+            <div class="owl-slider">
+                <div id="carousel4" class="owl-carousel">
+                    {% for i in session.allAlbum %}
+                        <div class="item">
+                            <div class="w-full">
+                                {#                            <a class="block relative h-48 rounded overflow-hidden">#}
+                                {#                                <img alt={{ i.Song_ID }} class="object-cover object-center w-full h-full block"#}
+                                {#                                src= {{ i.ImageLocation }}>#}
+                                {#                            </a>#}
+                                <div class="mt-4">
+                                    <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">{{ i.albID }}</h3>
+                                    <h2 class="text-gray-900 title-font text-lg font-medium">{{ i.albName }}</h2>
+                                    <p class="mt-1">Songs Count : {{ i.albSongCount }}</p>
+                                    <hr>
+                                    <p class="mt-1"><b>SONGS</b></p>
+
+                                    {% for j in i.albSongs %}
+                                        <p style="margin-bottom: 5%" class="mt-1">{{ j }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    <script>
+        jQuery("#carousel").owlCarousel({
+            autoplay: true,
+            lazyLoad: true,
+            loop: true,
+            margin: 20,
+            /*
+           animateOut: 'fadeOut',
+           animateIn: 'fadeIn',a
+           */
+            responsiveClass: true,
+            autoHeight: true,
+            autoplayTimeout: 7000,
+            smartSpeed: 800,
+            nav: true,
+            responsive: {
+                0: {
+                    items: 1
+                },
+
+                600: {
+                    items: 3
+                },
+
+                1024: {
+                    items: 4
+                },
+
+                1366: {
+                    items: 4
+                }
+            }
+        });
+        jQuery("#carousel1").owlCarousel({
+            autoplay: true,
+            lazyLoad: true,
+            loop: true,
+            margin: 20,
+            /*
+           animateOut: 'fadeOut',
+           animateIn: 'fadeIn',a
+           */
+            responsiveClass: true,
+            autoHeight: true,
+            autoplayTimeout: 7000,
+            smartSpeed: 800,
+            nav: true,
+            responsive: {
+                0: {
+                    items: 1
+                },
+
+                600: {
+                    items: 3
+                },
+
+                1024: {
+                    items: 4
+                },
+
+                1366: {
+                    items: 4
+                }
+            }
+        });
+        jQuery("#carousel2").owlCarousel({
+            autoplay: true,
+            lazyLoad: true,
+            loop: true,
+            margin: 20,
+            /*
+           animateOut: 'fadeOut',
+           animateIn: 'fadeIn',a
+           */
+            responsiveClass: true,
+            autoHeight: true,
+            autoplayTimeout: 7000,
+            smartSpeed: 800,
+            nav: true,
+            responsive: {
+                0: {
+                    items: 1
+                },
+
+                600: {
+                    items: 3
+                },
+
+                1024: {
+                    items: 4
+                },
+
+                1366: {
+                    items: 4
+                }
+            }
+        });
+        jQuery("#carousel3").owlCarousel({
+            autoplay: true,
+            lazyLoad: true,
+            loop: true,
+            margin: 20,
+            /*
+           animateOut: 'fadeOut',
+           animateIn: 'fadeIn',a
+           */
+            responsiveClass: true,
+            autoHeight: true,
+            autoplayTimeout: 7000,
+            smartSpeed: 800,
+            nav: true,
+            responsive: {
+                0: {
+                    items: 1
+                },
+
+                600: {
+                    items: 3
+                },
+
+                1024: {
+                    items: 4
+                },
+
+                1366: {
+                    items: 4
+                }
+            }
+        });
+        jQuery("#carousel4").owlCarousel({
+            autoplay: true,
+            lazyLoad: true,
+            loop: true,
+            margin: 20,
+            /*
+           animateOut: 'fadeOut',
+           animateIn: 'fadeIn',a
+           */
+            responsiveClass: true,
+            autoHeight: true,
+            autoplayTimeout: 7000,
+            smartSpeed: 800,
+            nav: true,
+            responsive: {
+                0: {
+                    items: 1
+                },
+
+                600: {
+                    items: 3
+                },
+
+                1024: {
+                    items: 4
+                },
+
+                1366: {
+                    items: 4
+                }
+            }
+        });
+        const musicContainer = document.getElementById('music-container');
+        const playBtn = document.getElementById('play');
+        const prevBtn = document.getElementById('prev');
+        const nextBtn = document.getElementById('next');
+
+        const audio = document.getElementById('audio');
+        const progress = document.getElementById('progress');
+        const progressContainer = document.getElementById('progress-container');
+        const title = document.getElementById('title');
+        const cover = document.getElementById('cover');
+
+        // Song titles
+        const songs = ['hey', 'summer', 'ukulele'];
+
+        // Keep track of song
+        let songIndex = 2;
+
+        // Initially load song details into DOM
+        loadSong(songs[songIndex]);
+
+        // Update song details
+        function loadSong(song) {
+            title.innerText = song;
+            audio.src = `music/${song}.mp3`;
+            cover.src = `images/${song}.jpg`;
+        }
+
+        // Play song
+        function playSong() {
+            musicContainer.classList.add('play');
+            playBtn.querySelector('i.fas').classList.remove('fa-play');
+            playBtn.querySelector('i.fas').classList.add('fa-pause');
+
+            audio.play();
+        }
+
+        // Pause song
+        function pauseSong() {
+            musicContainer.classList.remove('play');
+            playBtn.querySelector('i.fas').classList.add('fa-play');
+            playBtn.querySelector('i.fas').classList.remove('fa-pause');
+
+            audio.pause();
+        }
+
+        // Previous song
+        function prevSong() {
+            songIndex--;
+
+            if (songIndex < 0) {
+                songIndex = songs.length - 1;
+            }
+
+            loadSong(songs[songIndex]);
+
+            playSong();
+        }
+
+        // Next song
+        function nextSong() {
+            songIndex++;
+
+            if (songIndex > songs.length - 1) {
+                songIndex = 0;
+            }
+
+            loadSong(songs[songIndex]);
+
+            playSong();
+        }
+
+        // Update progress bar
+        function updateProgress(e) {
+            const {duration, currentTime} = e.srcElement;
+            const progressPercent = (currentTime / duration) * 100;
+            progress.style.width = `${progressPercent}%`;
+        }
+
+        // Set progress bar
+        function setProgress(e) {
+            const width = this.clientWidth;
+            const clickX = e.offsetX;
+            const duration = audio.duration;
+
+            audio.currentTime = (clickX / width) * duration;
+        }
+
+        // Event listeners
+        playBtn.addEventListener('click', () => {
+            const isPlaying = musicContainer.classList.contains('play');
+
+            if (isPlaying) {
+                pauseSong();
+            } else {
+                playSong();
+            }
+        });
+
+        // Change song
+        prevBtn.addEventListener('click', prevSong);
+        nextBtn.addEventListener('click', nextSong);
+
+        // Time/song update
+        audio.addEventListener('timeupdate', updateProgress);
+
+        // Click on progress bar
+        progressContainer.addEventListener('click', setProgress);
+
+        // Song ends
+        audio.addEventListener('ended', nextSong);
+
+    </script>
+
+
+{% endblock %}

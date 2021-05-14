@@ -1,0 +1,188 @@
+<head>
+    <meta charset="utf-8">
+    <title>Harmelodime</title>
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.css" integrity="sha512-nNlU0WK2QfKsuEmdcTwkeh+lhGs6uyOxuUs+n+0oXSYDok5qy0EI0lt01ZynHq6+p/tbgpZ7P+yUb+r71wqdXg==" crossorigin="anonymous" />
+
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+          <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/">Harmelodime</a>
+            <button class="navbar-toggler d-block d-lg-none" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+        
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Albums">Album</a>
+                    </li>
+        
+                    <li class="nav-item">
+                        <a class="nav-link" href="/connect">Contributors</a>
+                    </li>
+        
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                   
+                            <a href="/createSearchData">
+                                <button type="button" class="btn btn-outline-success my-2 mr-2">Spotify</button>
+                            </a>
+                            <a href="/add_song">
+                                <button type="button" class="btn btn-outline-success my-2 mr-2">Add Song</button>
+                            </a>
+                            <a href="/add_album">
+                                <button type="button" class="btn btn-outline-success my-2 mr-2">Create Album</button>
+                            </a>
+                            <a href="/add_artist">
+                                <button type="button" class="btn btn-outline-success my-2 mr-2">Add Artist</button>
+                            </a>
+                            <a href="/add_genre">
+                                <button type="button" class="btn btn-outline-success my-2 mr-2">Add Genre</button>
+                            </a>
+                        
+                            <a href="/create_private_playlist">
+                                <button type="button" class="btn btn-outline-success my-2 mr-2">Create Playlist</button>
+                            </a>
+                            <a href="/create_like_song">
+                                <button type="button" class="btn btn-outline-success my-2 mr-2">Like Song</button>
+                            </a>
+                            <a href="/create_like_artist">
+                                <button type="button" class="btn btn-outline-success my-2 mr-2">Like Artist</button>
+                            </a>
+                            <a href="/create_like_genre">
+                                <button type="button" class="btn btn-outline-success my-2 mr-2">Like Genre</button>
+                            </a>
+                        
+        
+                        <li class="nav-item active">
+                            <a href="/dashboard">
+                                <button type="button" class="btn btn-primary my-2 mr-2">Dashboard</button>
+                            </a>
+                        </li>
+        
+                        <li class="nav-item active">
+                            <a href="/logout">
+                                <button type="button" class="btn btn-danger my-2 mr-2">Logout</button>
+                            </a>
+                        </li>
+                    
+                        <li class="nav-item active">
+                            <a href="/register">
+                                <button type="button" class="btn btn-outline-secondary my-2 mr-2">Register</button>
+                            </a>
+                        </li>
+                        <li class="nav-item active">
+                            <a href="/login">
+                                <button type="button" class="btn btn-outline-primary my-2 mr-2">Login</button>
+                            </a>
+                        </li>
+                    
+        
+                </ul>
+        
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="searchYT">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="" onclick=window.open("https://www.youtube.com/results?search_query="+document.getElementById("searchYT").value)>Search</button>
+                </form>
+            </div>
+        </nav>
+        
+</head>
+    <style>
+        .zoom {
+            padding: 0px;
+            transition: transform .2s; /* Animation */
+            background-color: white;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto;
+        }
+
+        .zoom:hover {
+            transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+        }
+
+        body {
+            margin: 0;
+            background-size: auto;
+            background-image: url(Image3.jpeg);
+            background-size: contain;
+        }
+
+        
+        
+    </style>
+    <div class="jumbotron text-center">
+        <h1 style="font-size: 100px; font-style: italic;">Harmelodime Music Destination</h1>
+        <p class="lead"> The true beauty of music is that it connects people. It carries a message, and we, the
+            musicians, are the messengers.<br> Music is a piece of art that goes in the ears straight to the heart.</p>
+        <a href="/diagram" class="btn btn-primary btn-lg">Database</a>
+    </div>
+    <section class="hover:text-gray-800 body-font">
+        <div class="container px-5 py-24 mx-auto" id="jumbotron text-center">
+            <h1 class="text-3xl font-medium title-font text-gray-900 mb-12 text-center">Our Team</h1>
+            <div class="flex flex-wrap -m-4">
+                <div class="p-4 md:w-1/2 w-full">
+                    <div class="h-full bg-gray-200 p-8 rounded">
+                        <svg height="24px" width="24px" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                             class="block w-5 h-5 text-gray-400 mb-4" viewBox="0 0 975.036 975.036">
+                            <path d="M925.036 57.197h-304c-27.6 0-50 22.4-50 50v304c0 27.601 22.4 50 50 50h145.5c-1.9 79.601-20.4 143.3-55.4 191.2-27.6 37.8-69.399 69.1-125.3 93.8-25.7 11.3-36.8 41.7-24.8 67.101l36 76c11.6 24.399 40.3 35.1 65.1 24.399 66.2-28.6 122.101-64.8 167.7-108.8 55.601-53.7 93.7-114.3 114.3-181.9 20.601-67.6 30.9-159.8 30.9-276.8v-239c0-27.599-22.401-50-50-50zM106.036 913.497c65.4-28.5 121-64.699 166.9-108.6 56.1-53.7 94.4-114.1 115-181.2 20.6-67.1 30.899-159.6 30.899-277.5v-239c0-27.6-22.399-50-50-50h-304c-27.6 0-50 22.4-50 50v304c0 27.601 22.4 50 50 50h145.5c-1.9 79.601-20.4 143.3-55.4 191.2-27.6 37.8-69.4 69.1-125.3 93.8-25.7 11.3-36.8 41.7-24.8 67.101l35.9 75.8c11.601 24.399 40.501 35.2 65.301 24.399z"></path>
+                        </svg>
+                        <p class="leading-relaxed mb-6">Skilled in SQL, C, C++ and Java. Currently pursuing B.Tech CSE from VIT Vellore. Reached intermediate level in Database Management.</p>
+                        <a class="inline-flex items-center">
+                            <img alt="testimonial" src="Nishtha.jpeg"
+                                 class="w-12 h-12 rounded-full flex-shrink-0 object-cover object-center zoom">
+                            <span class="flex-grow flex flex-col pl-4">
+      <span class="title-font font-medium text-gray-900">Nishtha Singh</span>
+      <span class="text-gray-500 text-sm">Database Developer</span>
+    </span>
+                        </a>
+                    </div>
+                </div>
+                <div class="p-4 md:w-1/2 w-full">
+                    <div class="h-full bg-gray-200 p-8 rounded">
+                        <svg height="24px" width="24px" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                             class="block w-5 h-5 text-gray-400 mb-4" viewBox="0 0 975.036 975.036">
+                            <path d="M925.036 57.197h-304c-27.6 0-50 22.4-50 50v304c0 27.601 22.4 50 50 50h145.5c-1.9 79.601-20.4 143.3-55.4 191.2-27.6 37.8-69.399 69.1-125.3 93.8-25.7 11.3-36.8 41.7-24.8 67.101l36 76c11.6 24.399 40.3 35.1 65.1 24.399 66.2-28.6 122.101-64.8 167.7-108.8 55.601-53.7 93.7-114.3 114.3-181.9 20.601-67.6 30.9-159.8 30.9-276.8v-239c0-27.599-22.401-50-50-50zM106.036 913.497c65.4-28.5 121-64.699 166.9-108.6 56.1-53.7 94.4-114.1 115-181.2 20.6-67.1 30.899-159.6 30.899-277.5v-239c0-27.6-22.399-50-50-50h-304c-27.6 0-50 22.4-50 50v304c0 27.601 22.4 50 50 50h145.5c-1.9 79.601-20.4 143.3-55.4 191.2-27.6 37.8-69.4 69.1-125.3 93.8-25.7 11.3-36.8 41.7-24.8 67.101l35.9 75.8c11.601 24.399 40.501 35.2 65.301 24.399z"></path>
+                        </svg>
+                        <p class="leading-relaxed mb-6">Skilled in Python, HTML and CSS. Currently pursuing B.Tech CSE from VIT Vellore. Working as a Front End Developer.</p>
+                        <a class="inline-flex items-center">
+                            <img alt="testimonial" src="Sarthak.jpeg"
+                                 class="w-12 h-12 rounded-full flex-shrink-0 object-cover object-center zoom">
+                            <span class="flex-grow flex flex-col pl-4">
+      <span class="title-font font-medium text-gray-900">Sarthak Sharma</span>
+      <span class="text-gray-500 text-sm">Front End Developer</span>
+    </span>
+                        </a>
+                    </div>
+                </div>
+                <div class="p-4 md:w-1/2 w-full">
+                    <div class="h-full bg-gray-200 p-8 rounded">
+                        <svg height="24px" width="24px" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                             class="block w-5 h-5 text-gray-400 mb-4" viewBox="0 0 975.036 975.036">
+                            <path d="M925.036 57.197h-304c-27.6 0-50 22.4-50 50v304c0 27.601 22.4 50 50 50h145.5c-1.9 79.601-20.4 143.3-55.4 191.2-27.6 37.8-69.399 69.1-125.3 93.8-25.7 11.3-36.8 41.7-24.8 67.101l36 76c11.6 24.399 40.3 35.1 65.1 24.399 66.2-28.6 122.101-64.8 167.7-108.8 55.601-53.7 93.7-114.3 114.3-181.9 20.601-67.6 30.9-159.8 30.9-276.8v-239c0-27.599-22.401-50-50-50zM106.036 913.497c65.4-28.5 121-64.699 166.9-108.6 56.1-53.7 94.4-114.1 115-181.2 20.6-67.1 30.899-159.6 30.899-277.5v-239c0-27.6-22.399-50-50-50h-304c-27.6 0-50 22.4-50 50v304c0 27.601 22.4 50 50 50h145.5c-1.9 79.601-20.4 143.3-55.4 191.2-27.6 37.8-69.4 69.1-125.3 93.8-25.7 11.3-36.8 41.7-24.8 67.101l35.9 75.8c11.601 24.399 40.501 35.2 65.301 24.399z"></path>
+                        </svg>
+                        <p class="leading-relaxed mb-6">Have knowledge about JavaScript and NodeJS. Currently pursuing B.Tech CSE from VIT Vellore. Core committee member in Toast Masters International.</p>
+                        <a class="inline-flex items-center">
+                            <img alt="testimonial" src="Sravya.jpeg"
+                                 class="w-12 h-12 rounded-full flex-shrink-0 object-cover object-center zoom">
+                            <span class="flex-grow flex flex-col pl-4">
+      <span class="title-font font-medium text-gray-900">Sravya Brisa</span>
+      <span class="text-gray-500 text-sm">Back End Developer</span>
+    </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
