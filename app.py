@@ -17,6 +17,8 @@ from spotipy.oauth2 import SpotifyClientCredentials
 from werkzeug.utils import secure_filename
 from wtforms import Form, StringField, PasswordField, validators, SelectField, ValidationError, SelectMultipleField
 
+from sql_injection_prevention import *
+
 
 def func1():
     print('Working', end='')
@@ -45,9 +47,9 @@ artistList = []
 songList = []
 
 app.config['MYSQL_HOST'] = 'remotemysql.com'
-app.config['MYSQL_USER'] = 'HRGQdC6DNX'
-app.config['MYSQL_PASSWORD'] = 'uXrejzFXTy'
-app.config['MYSQL_DB'] = 'HRGQdC6DNX'
+app.config['MYSQL_USER'] = 'PPC86qYQT0'
+app.config['MYSQL_PASSWORD'] = 'V5Zq4jolh1'
+app.config['MYSQL_DB'] = 'PPC86qYQT0'
 
 
 # app.config['MYSQL_HOST'] = 'localhost'
@@ -143,31 +145,33 @@ def createSearchData():
                 songUrl = []
 
                 i = 0
+                if (is_this_query_ok(search) and is_this_query_ok(songID) and is_this_query_ok(query)):                    
+                    for item in songID:
+                        alpha = sp.track(item)
+                        songName.append(alpha['name'])
+                        if not alpha['album']['images']:
+                            songImage.append("https://dummyimage.com/420x260")
+                        else:
+                            songImage.append(alpha['album']['images'][0]['url'])
+                        songUrl.append("https://open.spotify.com/embed/track/" + alpha['uri'].split(':')[2])
+                        songArtist.append([])
+                        for j in range(len(alpha['artists'])):
+                            songArtist[i].append(alpha['artists'][j]['name'])
 
-                for item in songID:
-                    alpha = sp.track(item)
-                    songName.append(alpha['name'])
-                    if not alpha['album']['images']:
-                        songImage.append("https://dummyimage.com/420x260")
-                    else:
-                        songImage.append(alpha['album']['images'][0]['url'])
-                    songUrl.append("https://open.spotify.com/embed/track/" + alpha['uri'].split(':')[2])
-                    songArtist.append([])
-                    for j in range(len(alpha['artists'])):
-                        songArtist[i].append(alpha['artists'][j]['name'])
+                        i += 1
 
-                    i += 1
-
-                songDet = [{'songName': t[0], 'songID': t[1], 'songArtist': t[2], 'songImage': t[3], 'songUrl': t[4]}
-                           for t in
-                           zip(songName, songID, songArtist, songImage, songUrl)]
-                session['songDet'] = songDet
-                session['artDet'] = ""
-                flash("Successfully Searched for Songs", 'success')
-                # print(request.form.to_dict()["Search"])
-                request.form.to_dict()["Search"] = ""
-                return render_template('createSearchData.html', form=form)
-                # return redirect(url_for('createSearchData'))
+                        songDet = [{'songName': t[0], 'songID': t[1], 'songArtist': t[2], 'songImage': t[3], 'songUrl': t[4]}
+                               for t in
+                               zip(songName, songID, songArtist, songImage, songUrl)]
+                    session['songDet'] = songDet
+                    session['artDet'] = ""
+                    flash("Successfully Searched for Songs", 'success')
+                    # print(request.form.to_dict()["Search"])
+                    request.form.to_dict()["Search"] = ""
+                    return render_template('createSearchData.html', form=form)
+                    # return redirect(url_for('createSearchData'))
+            else:
+                return render_template('createSearchData.html', form=form, error = "SQL INJECTION DETECTED")
         except Exception as e:
             print(e)
             print("FIRST LOOP")
@@ -179,21 +183,25 @@ def createSearchData():
                 artistImage = []
                 artistGenre = []
 
-                for i in range(len(alpha['artists'])):
-                    artistName.append(alpha['artists'][i]['name'])
-                    beta = sp.search(q=alpha['artists'][i]['name'], limit=1, type="artist")
-                    if not beta['artists']['items'][0]['images']:
-                        artistImage.append("https://dummyimage.com/420x260")
-                    else:
+                if(is_this_query_ok(artistName)):
 
-                        artistImage.append(beta['artists']['items'][0][
-                                               'images'][0]['url'])
-                        artistGenre.append(beta['artists']['items'][0]['genres'])
-                artDet = [{'artistName': t[0], 'artistImage': t[1], 'artistGenre': t[2]} for t in
-                          zip(artistName, artistImage, artistGenre)]
-                session['artDet'] = artDet
-                flash("Successfully Searched for Artist of song " + alpha['name'], 'success')
-                return render_template('createSearchData.html', form=form)
+                    for i in range(len(alpha['artists'])):
+                        artistName.append(alpha['artists'][i]['name'])
+                        beta = sp.search(q=alpha['artists'][i]['name'], limit=1, type="artist")
+                        if not beta['artists']['items'][0]['images']:
+                            artistImage.append("https://dummyimage.com/420x260")
+                        else:
+
+                            artistImage.append(beta['artists']['items'][0][
+                                                   'images'][0]['url'])
+                            artistGenre.append(beta['artists']['items'][0]['genres'])
+                    artDet = [{'artistName': t[0], 'artistImage': t[1], 'artistGenre': t[2]} for t in
+                              zip(artistName, artistImage, artistGenre)]
+                    session['artDet'] = artDet
+                    flash("Successfully Searched for Artist of song " + alpha['name'], 'success')
+                    return render_template('createSearchData.html', form=form)
+                else:
+                    return render_template('createSearchData.html',form = form , error = "SQL INJECTION DETECTED")
                 # return redirect(url_for('createSearchData'))
         except Exception as e:
             print(e)
@@ -308,15 +316,20 @@ def createSearchData():
 
                             ID = str(ArtistID).zfill(8)
 
-                            cur.execute("INSERT INTO Artist(Name,Artist_ID,DOB) "
-                                        "VALUES(%s,%s,%s)",
-                                        (dbArtist[i], ID, artistDOB))
+                            if (is_this_query_ok(dbArtist[i]) and is_this_query_ok(artistDOB) and is_this_query_ok(ID)):
+                                cur.execute("INSERT INTO Artist(Name,Artist_ID,DOB) "
+                                            "VALUES(%s,%s,%s)",
+                                            (dbArtist[i], ID, artistDOB))
+                            else:
+                                return """html"""
+
                             j += 1
 
                     cur2 = mysql.connection.cursor()
                     for i in range(len(dbArtist)):
-                        cur.execute("SELECT Artist_ID FROM Artist WHERE Name=%s", [dbArtist[i]])
-                        artistID.append(cur.fetchone()['Artist_ID'])
+                        if (is_this_query_ok(dbArtist[i])):
+                            cur.execute("SELECT Artist_ID FROM Artist WHERE Name=%s", [dbArtist[i]])
+                            artistID.append(cur.fetchone()['Artist_ID'])
                     cur2.close()
 
                     cur.execute(
@@ -367,11 +380,14 @@ def addArtist():
         Name = form.Name.data
         artist_id = form.Artist_ID.data
         DOB = form.DOB.data
-        global name, unique_id, dob
-        name = Name
-        unique_id = artist_id
-        dob = DOB
-
+        if (is_this_query_ok(Name) and is_this_query_ok(artist_id) and is_this_query_ok(DOB)):
+            global name, unique_id, dob
+            name = Name
+            unique_id = artist_id
+            dob = DOB
+        else:
+            return render_template('add_artist.html', form=form, error="SQL Injection detected")
+        
         cur = mysql.connection.cursor()
         result = cur.execute("SELECT * FROM Artist WHERE Artist_ID= %s", [unique_id])
         if result > 0:
@@ -408,9 +424,12 @@ def addGenre():
     if request.method == 'POST' and form.validate():
         Name = form.Name.data
         genre_id = form.Genre_ID.data
-        global name, unique_id
-        name = Name
-        unique_id = genre_id
+        if (is_this_query_ok(Name)):
+            global name, unique_id
+            name = Name
+            unique_id = genre_id
+        else:
+            return render_template('add_genre.html', form=form, error="SQL INJECTION DETECTED")
 
         cur = mysql.connection.cursor()
         result = cur.execute("SELECT * FROM Genre WHERE Genre_ID= %s", [unique_id])
@@ -537,7 +556,7 @@ def addSong():
             result2 = cur.execute("SELECT * FROM Artist WHERE Artist_ID=%s", [artistList[i]])
             if result2 == 0:
                 flag = 0
-                break;
+                break
         if result > 0:
             error = 'Song ID Already Exists, Please try Another Song ID.'
             os.remove(location)
@@ -602,6 +621,7 @@ def AddAlbum():
     if request.method == 'POST' and form.validate():
         Name = form.Name.data
         songName = form.SongName.data
+        
         # print(songName)
         SongID = []
         cur = mysql.connection.cursor()
@@ -610,27 +630,30 @@ def AddAlbum():
             SongID.append(cur.fetchone()['Song_ID'])
         cur.close()
         AlbumID = form.Album_ID.data
+        if (is_this_query_ok(Name) and is_this_query_ok(songName)):
 
-        global name, unique_id, songList
-        name = Name
-        songList = SongID
-        unique_id = AlbumID
-        cur = mysql.connection.cursor()
-        result = cur.execute("SELECT * FROM Album WHERE Album_ID= %s", [unique_id])
-        if result > 0:
-            error = 'Album ID Already Exists, Please try Another Album ID.'
-            return render_template('add_song.html', form=form, error=error)
+            global name, unique_id, songList
+            name = Name
+            songList = SongID
+            unique_id = AlbumID
+            cur = mysql.connection.cursor()
+            result = cur.execute("SELECT * FROM Album WHERE Album_ID= %s", [unique_id])
+            if result > 0:
+                error = 'Album ID Already Exists, Please try Another Album ID.'
+                return render_template('add_song.html', form=form, error=error)
+            else:
+                cur.execute("INSERT INTO Album(Album_ID, Name) "
+                            "VALUES(%s,%s)",
+                            (unique_id, name))
+                for i in range(len(songList)):
+                    cur.execute("INSERT INTO Album_Song(Album_ID, Song_ID) VALUES (%s,%s)",
+                                (unique_id, songList[i]))
+                mysql.connection.commit()
+                cur.close()
+                flash('Successfully Added {} with id {}'.format(name, unique_id), 'success')
+            return render_template('add_album.html', form=form)
         else:
-            cur.execute("INSERT INTO Album(Album_ID, Name) "
-                        "VALUES(%s,%s)",
-                        (unique_id, name))
-            for i in range(len(songList)):
-                cur.execute("INSERT INTO Album_Song(Album_ID, Song_ID) VALUES (%s,%s)",
-                            (unique_id, songList[i]))
-            mysql.connection.commit()
-            cur.close()
-            flash('Successfully Added {} with id {}'.format(name, unique_id), 'success')
-    return render_template('add_album.html', form=form)
+            return render_template('add_album.html', form=form,error="SQL INJECTION DETECTED")
 
 
 class RegisterForm(Form):
@@ -689,39 +712,42 @@ def register():
         Password = sha256_crypt.encrypt(str(form.Password.data))
         user_id = form.User_ID.data
         DOB = form.DOB.data
-        global mobile, name, email, password, unique_id, gender, address, dob
-        name = Name
-        mobile = Mobile
-        email = Email_ID
-        password = Password
-        unique_id = user_id
-        address = Address
-        gender = Gender
-        dob = DOB
+        if(is_this_query_ok(Name) and is_this_query_ok(Address)):
+            global mobile, name, email, password, unique_id, gender, address, dob
+            name = Name
+            mobile = Mobile
+            email = Email_ID
+            password = Password
+            unique_id = user_id
+            address = Address
+            gender = Gender
+            dob = DOB
+        
+            token = s.dumps(email, salt='email-confirm')
 
-        token = s.dumps(email, salt='email-confirm')
+            msg = Message('Confirm Email', sender='forprojectsonly13@gmail.com', recipients=[email])
 
-        msg = Message('Confirm Email', sender='rs0666993@gmail.com', recipients=[email])
+            link = url_for('confirm_email', token=token, _external=True)
 
-        link = url_for('confirm_email', token=token, _external=True)
+            msg.body = 'Your verification link for Music steaming website is {}'.format(link)
 
-        msg.body = 'Your verification link for MusiX is {}'.format(link)
+            mail.send(msg)
 
-        mail.send(msg)
-
-        cur = mysql.connection.cursor()
-        result = cur.execute("SELECT * FROM Register WHERE Register_ID= %s", [unique_id])
-        result2 = cur.execute("SELECT * FROM Register WHERE Email_ID=%s AND Mobile=%s", [email, mobile])
-        if result > 0:
-            error = 'UserName Already Exists, Please try Another UserName.'
-            return render_template('register.html', form=form, error=error)
-        if result2 > 0:
-            error = 'Email and Mobile combination Already Exists, Please try another combination.'
-            return render_template('register.html', form=form, error=error)
+            cur = mysql.connection.cursor()
+            result = cur.execute("SELECT * FROM Register WHERE Register_ID= %s", [unique_id])
+            result2 = cur.execute("SELECT * FROM Register WHERE Email_ID=%s AND Mobile=%s", [email, mobile])
+            if result > 0:
+                error = 'UserName Already Exists, Please try Another UserName.'
+                return render_template('register.html', form=form, error=error)
+            if result2 > 0:
+                error = 'Email and Mobile combination Already Exists, Please try another combination.'
+                return render_template('register.html', form=form, error=error)
+            else:
+                flash('A confirmation link has been sent to your Email', 'success')
+            return redirect(url_for('index'))
         else:
-            flash('A confirmation link has been sent to your Email', 'success')
-        return redirect(url_for('index'))
-
+            return render_template('register.html', error = "SQL injection Detected")
+    
     return render_template('register.html', form=form)
 
 
@@ -744,7 +770,7 @@ def confirm_email(token):
         mysql.connection.commit()
         cur.close()
 
-        msg = Message('UserName for MusiX', sender='rs0666993@gmail.com', recipients=[email])
+        msg = Message('UserName for MusiX', sender='forprojectsonly13@gmail.com', recipients=[email])
 
         msg.body = 'Your UserName is {}'.format(unique_id)
 
@@ -762,35 +788,37 @@ def login():
         user_id = request.form["User_ID"]
 
         Password1 = request.form['Password']
+        if(is_this_query_ok(Password1)):
+            cur = mysql.connection.cursor()
+            cur2 = mysql.connection.cursor()
 
-        cur = mysql.connection.cursor()
-        cur2 = mysql.connection.cursor()
+            result = cur.execute("SELECT * FROM Login WHERE Login_ID= %s", [user_id])
+            result2 = cur2.execute("SELECT * FROM User WHERE User_ID=%s", [user_id])
 
-        result = cur.execute("SELECT * FROM Login WHERE Login_ID= %s", [user_id])
-        result2 = cur2.execute("SELECT * FROM User WHERE User_ID=%s", [user_id])
+            if result > 0:
+                data = cur.fetchone()
+                data2 = cur2.fetchone()
+                Password = data['Password']
 
-        if result > 0:
-            data = cur.fetchone()
-            data2 = cur2.fetchone()
-            Password = data['Password']
+                if sha256_crypt.verify(Password1, Password):
+                    session['logged_in'] = True
+                    session['username'] = user_id
+                    session['id'] = data['Login_ID']
+                    session['name'] = data2['Name']
 
-            if sha256_crypt.verify(Password1, Password):
-                session['logged_in'] = True
-                session['username'] = user_id
-                session['id'] = data['Login_ID']
-                session['name'] = data2['Name']
+                    flash('Login Successful', 'success')
+                    return redirect(url_for('index'))
+                else:
+                    error = 'Wrong Password!!'
 
-                flash('Login Successful', 'success')
-                return redirect(url_for('index'))
+                cur.close()
+                cur2.close()
+                return render_template('login.html', error=error)
             else:
-                error = 'Wrong Password!!'
-
-            cur.close()
-            cur2.close()
-            return render_template('login.html', error=error)
+                error = 'Username not Found!!'
+                return render_template('login.html', error=error)
         else:
-            error = 'Username not Found!!'
-            return render_template('login.html', error=error)
+            return render_template("blocked_page.html")
 
     return render_template('login.html')
 
